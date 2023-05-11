@@ -4,6 +4,9 @@ import enter from './assets/enter.png';
 import addList from './addList.js';
 import List from './List.js';
 import Store from './store.js';
+import dummyList from './dynamicObj.js';
+
+const [first, second, third] = dummyList;
 
 const heading = document.getElementById('reloadImg');
 heading.src = reload;
@@ -39,6 +42,12 @@ const removeElem = () => {
 document.getElementById('reloadImg').addEventListener('click', removeElem);
 
 document.getElementById('clearBtn').addEventListener('click', removeElem);
+
+document.addEventListener('DOMContentLoaded', () => {
+  addList.addList(first);
+  addList.addList(second);
+  addList.addList(third);
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   addList.displayList();
