@@ -1,16 +1,17 @@
-import express from 'express';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import config, { output } from './webpack.config.js';
+const express = require("express");
+const webpack = require("webpack");
+const webpackDevMiddleware = require("webpack-dev-middleware");
 
 const app = express();
+const config = require("./webpack.config.js");
 
 const compiler = webpack(config);
 
 app.use(
   webpackDevMiddleware(compiler, {
-    publicPath: output.publicPath,
-  }),
+    publicPath: config.output.publicPath,
+  })
 );
 
-app.listen(3000);
+app.listen(8080);
+

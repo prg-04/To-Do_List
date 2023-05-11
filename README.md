@@ -70,7 +70,9 @@ Install this project with:
   - Next run npm install --legacy-peer-deps to install the dependencies
 ### Usage
 
-- Open your text editor of choice and open the /dist folder and run index.html using a live server to use the website
+- Open your text editor of choice and open the terminal and run the following command to open the app in the browser:
+
+  - npm run start
 
 
 ### Deployment
