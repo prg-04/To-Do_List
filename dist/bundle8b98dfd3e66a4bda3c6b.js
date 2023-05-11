@@ -147,6 +147,33 @@ var UIList = /*#__PURE__*/function () {
 
 /***/ }),
 
+/***/ "./src/dynamicObj.js":
+/*!***************************!*\
+  !*** ./src/dynamicObj.js ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var dummyList = [{
+  id: 1,
+  description: 'Do the laundry',
+  completed: false
+}, {
+  id: 2,
+  description: 'Do the dishes',
+  completed: false
+}, {
+  id: 3,
+  description: 'Do the shopping',
+  completed: false
+}];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (dummyList);
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -160,19 +187,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _addList_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./addList.js */ "./src/addList.js");
 /* harmony import */ var _List_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./List.js */ "./src/List.js");
 /* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _dynamicObj_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./dynamicObj.js */ "./src/dynamicObj.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
 
 
 
-var heading = document.getElementById('reloadImg');
+
+var _dummyList = _slicedToArray(_dynamicObj_js__WEBPACK_IMPORTED_MODULE_6__["default"], 3),
+  first = _dummyList[0],
+  second = _dummyList[1],
+  third = _dummyList[2];
+var heading = document.getElementById("reloadImg");
 heading.src = _assets_refresh_png__WEBPACK_IMPORTED_MODULE_1__;
-document.getElementById('addBtn').innerHTML = "\n<img src=".concat(_assets_enter_png__WEBPACK_IMPORTED_MODULE_2__, " alt=\"enter\" />\n");
-document.getElementById('form').addEventListener('submit', function (e) {
+document.getElementById("addBtn").innerHTML = "\n<img src=".concat(_assets_enter_png__WEBPACK_IMPORTED_MODULE_2__, " alt=\"enter\" />\n");
+document.getElementById("form").addEventListener("submit", function (e) {
   e.preventDefault();
-  var input = document.getElementById('input').value;
-  if (input === '') {
+  var input = document.getElementById("input").value;
+  if (input === "") {
     _addList_js__WEBPACK_IMPORTED_MODULE_3__["default"].showAlert();
   } else {
     var list = new _List_js__WEBPACK_IMPORTED_MODULE_4__["default"](input);
@@ -182,20 +221,24 @@ document.getElementById('form').addEventListener('submit', function (e) {
   }
 });
 var removeElem = function removeElem() {
-  document.querySelectorAll('.list-group-item').forEach(function (elem) {
-    elem.querySelectorAll('.form-check-input').forEach(function (item) {
+  document.querySelectorAll(".list-group-item").forEach(function (elem) {
+    elem.querySelectorAll(".form-check-input").forEach(function (item) {
       if (item.checked === true) {
         item.parentNode.parentNode.remove();
         _addList_js__WEBPACK_IMPORTED_MODULE_3__["default"].removeCompleted(item);
-        _store_js__WEBPACK_IMPORTED_MODULE_5__["default"].removeList(item); // pass the id of the removed item
+        _store_js__WEBPACK_IMPORTED_MODULE_5__["default"].removeList(item);
       }
     });
   });
 };
-
-document.getElementById('reloadImg').addEventListener('click', removeElem);
-document.getElementById('clearBtn').addEventListener('click', removeElem);
-document.addEventListener('DOMContentLoaded', function () {
+document.getElementById("reloadImg").addEventListener("click", removeElem);
+document.getElementById("clearBtn").addEventListener("click", removeElem);
+document.addEventListener("DOMContentLoaded", function () {
+  _dynamicObj_js__WEBPACK_IMPORTED_MODULE_6__["default"].forEach(function (list) {
+    _addList_js__WEBPACK_IMPORTED_MODULE_3__["default"].addList(list);
+  });
+});
+document.addEventListener("DOMContentLoaded", function () {
   _addList_js__WEBPACK_IMPORTED_MODULE_3__["default"].displayList();
 });
 
@@ -275,7 +318,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  background-color: #f3f3f3;\n  min-height: 100vh;\n  width: 100%;\n}\n\n.container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 90%;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n.container .heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  border-bottom: 1px solid #ccc;\n  padding: 1rem;\n  width: 100%;\n}\n.container .heading #reloadImg {\n  width: 15px;\n  height: 15px;\n  object-fit: fill;\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n.container .heading #reloadImg:hover {\n  transform: rotate(360deg) scale(1.05);\n}\n.container #form {\n  display: flex;\n  width: 100%;\n  height: 3rem;\n  margin-top: 0.5rem;\n  border-bottom: 1px solid #ccc;\n  padding: 1rem;\n}\n.container #form input {\n  width: 95%;\n  border: none;\n}\n.container #form input:focus {\n  outline: none;\n}\n.container #form #addBtn {\n  width: 45px;\n  border: none;\n  position: relative;\n  right: -0.8rem;\n  background-color: #fff;\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n.container #form #addBtn img {\n  width: 15px;\n  height: 15px;\n  object-fit: contain;\n}\n.container #form #addBtn:hover img {\n  transform: scale(1.05);\n}\n.container #list {\n  width: 100%;\n  gap: 1rem;\n}\n.container #list .list-group-item {\n  padding: 0 1rem;\n  margin: 1rem 0 0;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  border-bottom: 1px solid #ccc;\n}\n.container #list .list-group-item div {\n  height: 3rem;\n  flex: 1;\n  display: flex;\n  align-items: center;\n  gap: 1rem;\n}\n.container #list .list-group-item .dots {\n  height: 15px;\n  width: 15px;\n  object-fit: contain;\n}\n.container #clearBtn {\n  width: 100%;\n  height: 3rem;\n  border: none;\n}\n.container .error {\n  color: red;\n  font-size: 1rem;\n  font-weight: 500;\n  background-color: rgba(204, 51, 204, 0.2);\n  width: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 2rem;\n}\n\n@media screen and (min-width: 768px) {\n  #container {\n    width: 60%;\n  }\n}", "",{"version":3,"sources":["webpack://./src/styles.scss"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,gBAAA;EACA,qBAAA;EACA,sBAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,uBAAA;EACA,yBAAA;EACA,iBAAA;EACA,WAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,uBAAA;EACA,kBAAA;EACA,sBAAA;EACA,kBAAA;EACA,UAAA;EACA,WAAA;EACA,uCAAA;AACF;AACE;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,6BAAA;EACA,aAAA;EACA,WAAA;AACJ;AACI;EACE,WAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,gCAAA;AACN;AACM;EACE,qCAAA;AACR;AAIE;EACE,aAAA;EACA,WAAA;EACA,YAAA;EAEA,kBAAA;EACA,6BAAA;EACA,aAAA;AAHJ;AAKI;EACE,UAAA;EACA,YAAA;AAHN;AAKM;EACE,aAAA;AAHR;AAOI;EACE,WAAA;EACA,YAAA;EACA,kBAAA;EACA,cAAA;EACA,sBAAA;EACA,eAAA;EACA,gCAAA;AALN;AAOM;EACE,WAAA;EACA,YAAA;EACA,mBAAA;AALR;AASQ;EACE,sBAAA;AAPV;AAaE;EACE,WAAA;EACA,SAAA;AAXJ;AAaI;EACE,eAAA;EACA,gBAAA;EACA,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,6BAAA;AAXN;AAaM;EACE,YAAA;EACA,OAAA;EACA,aAAA;EACA,mBAAA;EACA,SAAA;AAXR;AAcM;EACE,YAAA;EACA,WAAA;EACA,mBAAA;AAZR;AAiBE;EACE,WAAA;EACA,YAAA;EACA,YAAA;AAfJ;AAkBE;EACE,UAAA;EACA,eAAA;EACA,gBAAA;EACA,yCAAA;EACA,WAAA;EACA,aAAA;EACA,mBAAA;EACA,uBAAA;EACA,YAAA;AAhBJ;;AAoBA;EACE;IACE,UAAA;EAjBF;AACF","sourcesContent":["* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  background-color: #f3f3f3;\n  min-height: 100vh;\n  width: 100%;\n}\n\n.container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 90%;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n\n  .heading {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    border-bottom: 1px solid #ccc;\n    padding: 1rem;\n    width: 100%;\n\n    #reloadImg {\n      width: 15px;\n      height: 15px;\n      object-fit: fill;\n      cursor: pointer;\n      transition: all 0.3s ease-in-out;\n\n      &:hover {\n        transform: rotate(360deg) scale(1.05);\n      }\n    }\n  }\n\n  #form {\n    display: flex;\n    width: 100%;\n    height: 3rem;\n    // margin: 0 1rem;\n    margin-top: 0.5rem;\n    border-bottom: 1px solid #ccc;\n    padding: 1rem;\n\n    input {\n      width: 95%;\n      border: none;\n\n      &:focus {\n        outline: none;\n      }\n    }\n\n    #addBtn {\n      width: 45px;\n      border: none;\n      position: relative;\n      right: -0.8rem;\n      background-color: #fff;\n      cursor: pointer;\n      transition: all 0.3s ease-in-out;\n\n      img {\n        width: 15px;\n        height: 15px;\n        object-fit: contain;\n      }\n\n      &:hover {\n        img {\n          transform: scale(1.05);\n        }\n      }\n    }\n  }\n\n  #list {\n    width: 100%;\n    gap: 1rem;\n\n    .list-group-item {\n      padding: 0 1rem;\n      margin: 1rem 0 0;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      border-bottom: 1px solid #ccc;\n\n      div {\n        height: 3rem;\n        flex: 1;\n        display: flex;\n        align-items: center;\n        gap: 1rem;\n      }\n\n      .dots {\n        height: 15px;\n        width: 15px;\n        object-fit: contain;\n      }\n    }\n  }\n\n  #clearBtn {\n    width: 100%;\n    height: 3rem;\n    border: none;\n  }\n\n  .error {\n    color: red;\n    font-size: 1rem;\n    font-weight: 500;\n    background-color: #c3c3;\n    width: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 2rem;\n  }\n}\n\n@media screen and (min-width: 768px) {\n  #container {\n    width: 60%;\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  background-color: #f3f3f3;\n  min-height: 100vh;\n  width: 100%;\n}\n\n.container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 90%;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n.container .heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  border-bottom: 1px solid #ccc;\n  padding: 1rem;\n  width: 100%;\n}\n.container .heading #reloadImg {\n  width: 15px;\n  height: 15px;\n  object-fit: fill;\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n.container .heading #reloadImg:hover {\n  transform: rotate(360deg) scale(1.05);\n}\n.container #form {\n  display: flex;\n  width: 100%;\n  height: 3rem;\n  margin-top: 0.5rem;\n  border-bottom: 1px solid #ccc;\n  padding: 1rem;\n}\n.container #form input {\n  width: 95%;\n  border: none;\n}\n.container #form input:focus {\n  outline: none;\n}\n.container #form #addBtn {\n  width: 45px;\n  border: none;\n  position: relative;\n  right: -0.8rem;\n  background-color: #fff;\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n.container #form #addBtn img {\n  width: 15px;\n  height: 15px;\n  object-fit: contain;\n}\n.container #form #addBtn:hover img {\n  transform: scale(1.05);\n}\n.container #list {\n  width: 100%;\n  gap: 1rem;\n}\n.container #list .list-group-item {\n  padding: 0 1rem;\n  margin: 1rem 0 0;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  border-bottom: 1px solid #ccc;\n}\n.container #list .list-group-item div {\n  height: 3rem;\n  flex: 1;\n  display: flex;\n  align-items: center;\n  gap: 1rem;\n}\n.container #list .list-group-item .dots {\n  height: 15px;\n  width: 15px;\n  object-fit: contain;\n}\n.container #clearBtn {\n  width: 100%;\n  height: 3rem;\n  border: none;\n}\n.container .error {\n  color: red;\n  font-size: 1rem;\n  font-weight: 500;\n  background-color: rgba(204, 51, 204, 0.2);\n  width: 100%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 2rem;\n}\n\n@media screen and (min-width: 768px) {\n  #container {\n    width: 60%;\n  }\n}", "",{"version":3,"sources":["webpack://./src/styles.scss"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,gBAAA;EACA,qBAAA;EACA,sBAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,uBAAA;EACA,yBAAA;EACA,iBAAA;EACA,WAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,uBAAA;EACA,kBAAA;EACA,sBAAA;EACA,kBAAA;EACA,UAAA;EACA,WAAA;EACA,uCAAA;AACF;AACE;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,6BAAA;EACA,aAAA;EACA,WAAA;AACJ;AACI;EACE,WAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,gCAAA;AACN;AACM;EACE,qCAAA;AACR;AAIE;EACE,aAAA;EACA,WAAA;EACA,YAAA;EACA,kBAAA;EACA,6BAAA;EACA,aAAA;AAFJ;AAII;EACE,UAAA;EACA,YAAA;AAFN;AAIM;EACE,aAAA;AAFR;AAMI;EACE,WAAA;EACA,YAAA;EACA,kBAAA;EACA,cAAA;EACA,sBAAA;EACA,eAAA;EACA,gCAAA;AAJN;AAMM;EACE,WAAA;EACA,YAAA;EACA,mBAAA;AAJR;AAQQ;EACE,sBAAA;AANV;AAYE;EACE,WAAA;EACA,SAAA;AAVJ;AAYI;EACE,eAAA;EACA,gBAAA;EACA,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,6BAAA;AAVN;AAYM;EACE,YAAA;EACA,OAAA;EACA,aAAA;EACA,mBAAA;EACA,SAAA;AAVR;AAaM;EACE,YAAA;EACA,WAAA;EACA,mBAAA;AAXR;AAgBE;EACE,WAAA;EACA,YAAA;EACA,YAAA;AAdJ;AAiBE;EACE,UAAA;EACA,eAAA;EACA,gBAAA;EACA,yCAAA;EACA,WAAA;EACA,aAAA;EACA,mBAAA;EACA,uBAAA;EACA,YAAA;AAfJ;;AAmBA;EACE;IACE,UAAA;EAhBF;AACF","sourcesContent":["* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  background-color: #f3f3f3;\n  min-height: 100vh;\n  width: 100%;\n}\n\n.container {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 90%;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n\n  .heading {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    border-bottom: 1px solid #ccc;\n    padding: 1rem;\n    width: 100%;\n\n    #reloadImg {\n      width: 15px;\n      height: 15px;\n      object-fit: fill;\n      cursor: pointer;\n      transition: all 0.3s ease-in-out;\n\n      &:hover {\n        transform: rotate(360deg) scale(1.05);\n      }\n    }\n  }\n\n  #form {\n    display: flex;\n    width: 100%;\n    height: 3rem;\n    margin-top: 0.5rem;\n    border-bottom: 1px solid #ccc;\n    padding: 1rem;\n\n    input {\n      width: 95%;\n      border: none;\n\n      &:focus {\n        outline: none;\n      }\n    }\n\n    #addBtn {\n      width: 45px;\n      border: none;\n      position: relative;\n      right: -0.8rem;\n      background-color: #fff;\n      cursor: pointer;\n      transition: all 0.3s ease-in-out;\n\n      img {\n        width: 15px;\n        height: 15px;\n        object-fit: contain;\n      }\n\n      &:hover {\n        img {\n          transform: scale(1.05);\n        }\n      }\n    }\n  }\n\n  #list {\n    width: 100%;\n    gap: 1rem;\n\n    .list-group-item {\n      padding: 0 1rem;\n      margin: 1rem 0 0;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      border-bottom: 1px solid #ccc;\n\n      div {\n        height: 3rem;\n        flex: 1;\n        display: flex;\n        align-items: center;\n        gap: 1rem;\n      }\n\n      .dots {\n        height: 15px;\n        width: 15px;\n        object-fit: contain;\n      }\n    }\n  }\n\n  #clearBtn {\n    width: 100%;\n    height: 3rem;\n    border: none;\n  }\n\n  .error {\n    color: red;\n    font-size: 1rem;\n    font-weight: 500;\n    background-color: #c3c3;\n    width: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 2rem;\n  }\n}\n\n@media screen and (min-width: 768px) {\n  #container {\n    width: 60%;\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -758,4 +801,4 @@ module.exports = __webpack_require__.p + "refresh.png";
 /******/ var __webpack_exports__ = (__webpack_exec__("./src/index.js"));
 /******/ }
 ]);
-//# sourceMappingURL=bundle754b976640529677c05e.js.map
+//# sourceMappingURL=bundle8b98dfd3e66a4bda3c6b.js.map
