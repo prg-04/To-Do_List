@@ -4,7 +4,6 @@ import enter from './assets/enter.png';
 import addList from './addList.js';
 import List from './List.js';
 import Store from './store.js';
-import dummyList from './dynamicObj.js';
 
 const heading = document.getElementById('reloadImg');
 heading.src = reload;
@@ -15,6 +14,7 @@ document.getElementById('addBtn').innerHTML = `
 
 document.getElementById('form').addEventListener('submit', (e) => {
   e.preventDefault();
+  window.location.reload();
   const input = document.getElementById('input').value;
   if (input === '') {
     addList.showAlert();
@@ -26,27 +26,22 @@ document.getElementById('form').addEventListener('submit', (e) => {
   }
 });
 
-const removeElem = () => {
-  document.querySelectorAll('.list-group-item').forEach((elem) => {
-    elem.querySelectorAll('.form-check-input').forEach((item) => {
-      if (item.checked === true) {
-        item.parentNode.parentNode.remove();
-        addList.removeCompleted(item);
-        Store.removeList(item);
-      }
-    });
-  });
-};
-document.getElementById('reloadImg').addEventListener('click', removeElem);
+document
+  .getElementById('reloadImg')
+  .addEventListener('click', addList.removeCompletedOnReload);
 
-document.getElementById('clearBtn').addEventListener('click', removeElem);
-
-document.addEventListener('DOMContentLoaded', () => {
-  dummyList.forEach((list) => {
-    addList.addList(list);
-  });
-});
+document
+  .getElementById('clearBtn')
+  .addEventListener('click', addList.removeCompletedOnClear);
 
 document.addEventListener('DOMContentLoaded', () => {
   addList.displayList();
+
+  document.querySelectorAll('.bin').forEach((item) => {
+    item.addEventListener('click', () => {
+      item.parentNode.remove();
+      addList.removeCompleted(item);
+      Store.removeChecked();
+    });
+  });
 });

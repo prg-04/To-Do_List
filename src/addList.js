@@ -1,4 +1,5 @@
 import dots from './assets/dots.png';
+import bin from './assets/bin.png';
 import './styles.scss';
 import Store from './store.js';
 
@@ -14,25 +15,61 @@ class UIList {
     li.className = 'list-group-item';
     li.id = list.id;
     li.innerHTML = `
-          <div>
-            <input type="checkbox" class="form-check-input me-2" ${
+      <div>
+        <input type="checkbox" class="form-check-input me-2" ${
   list.completed ? 'checked' : ''
-} /> ${list.description}
-          </div>
-          <img src=${dots} alt="toggle-menu" class="dots" />
-    `;
+} />
+        <span class="task-description${
+  list.completed ? ' completed' : ''
+}" contentEditable>${list.description}</span>
+      </div>
+      <img src=${dots} alt="toggle-menu" class="dots" />
+      <img src=${bin} alt="delete" class="bin" />
+
+  `;
     ul.appendChild(li);
 
     const checkbox = li.querySelector('.form-check-input');
+    const description = li.querySelector('.task-description');
+
+    if (list.completed) {
+      const binIcon = li.querySelector('.bin');
+      const dotsIcon = li.querySelector('.dots');
+      binIcon.style.display = 'block';
+      dotsIcon.style.display = 'none';
+      description.classList.add('completed');
+    } else {
+      const binIcon = li.querySelector('.bin');
+      const dotsIcon = li.querySelector('.dots');
+      binIcon.style.display = 'none';
+      dotsIcon.style.display = 'block';
+    }
+
     checkbox.addEventListener('change', () => {
       list.completed = checkbox.checked;
       list.element = li;
+      const binIcon = li.querySelector('.bin');
+      const dotsIcon = li.querySelector('.dots');
       if (list.completed) {
-        UIList.removeCompleted(li);
-        Store.removeList(list.id);
+        binIcon.style.display = 'block';
+        dotsIcon.style.display = 'none';
+        description.classList.add('completed');
+        description.contentEditable = false;
+        Store.updateCompleted(list);
       } else {
-        Store.addList(list);
+        binIcon.style.display = 'none';
+        dotsIcon.style.display = 'block';
+        description.classList.remove('completed');
+        description.contentEditable = true;
+        Store.uncheckCompleted(list);
       }
+      UIList.removeCompleted(li);
+    });
+
+    description.addEventListener('input', () => {
+      list.description = description.textContent;
+      list.element = li;
+      Store.updateList(list);
     });
   }
 
@@ -60,24 +97,19 @@ class UIList {
         const checkbox = childItem.querySelectorAll('input');
         if (checkbox[0].checked) {
           item.remove();
-          Store.removeList(item.listItem);
+          Store.removeChecked();
         }
       });
     });
   }
 
   static removeCompletedOnClear() {
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      document.querySelectorAll('.list-group-item').forEach((item) => {
-        item.querySelectorAll('div').forEach((childItem) => {
-          const checkbox = childItem.querySelectorAll('input');
-          if (checkbox[0].checked) {
-            item.remove();
-            Store.removeList(item.listItem); // Remove list item from local storage
-          }
-        });
-      });
-    });
+    const lists = document.querySelectorAll('.list-group-item');
+    const completedLists = Array.from(lists).filter(
+      (list) => list.querySelector('.form-check-input').checked,
+    );
+    completedLists.forEach((list) => list.remove());
+    Store.removeChecked();
   }
 
   static removeCompleted(target) {
