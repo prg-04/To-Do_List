@@ -1,8 +1,8 @@
 class List {
-  constructor(description, completed = false, index = +1) {
+  constructor(description, completed = false, id = 1) {
     this.description = description;
     this.completed = completed;
-    this.id = index;
+    this.id = id;
   }
 }
 
