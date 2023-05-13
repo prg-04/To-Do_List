@@ -110,7 +110,7 @@ class Task {
     const index = this.items.findIndex((item) => item.id === id);
     if (index !== -1) {
       this.items.splice(index, 1);
-      for (let i = index; i < this.items.length; i + 1) {
+      for (let i = index; i < this.items.length; i += 1) {
         this.items[i].id = i + 1;
       }
       this.store.setItems(this.items);
