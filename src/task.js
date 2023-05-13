@@ -1,4 +1,4 @@
-import './styles.scss';
+import './styles.css';
 import Store from './store.js';
 
 class Task {
@@ -21,6 +21,7 @@ class Task {
     const newItem = { ...item, [key]: value };
     const index = this.items.findIndex((i) => i.id === item.id);
     this.items[index] = newItem;
+
     this.store.setItems(this.items);
     this.updateList();
   }
@@ -76,7 +77,12 @@ class Task {
   }
 
   addList(list) {
-    list.id = this.currentId + 1;
+    if (this.items.length > 0) {
+      list.id = this.items[this.items.length - 1].id + 1;
+    } else {
+      list.id = 1;
+    }
+
     this.items.push(list);
     this.store.setItems(this.items);
     this.updateList();
@@ -100,14 +106,14 @@ class Task {
       ...item,
       id: index + 1,
     }));
-    this.currentId = uncheckedItems.length;
+
     this.store.setItems(this.items);
     this.updateList();
   }
 
-  clearInput= () => {
+  clearInput = () => {
     document.getElementById('input').value = '';
-  }
+  };
 }
 
 export default Task;

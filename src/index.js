@@ -1,4 +1,4 @@
-import './styles.scss';
+import './styles.css';
 import Task from './task.js';
 import List from './List.js';
 

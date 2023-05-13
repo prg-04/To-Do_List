@@ -21,7 +21,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
@@ -61,7 +61,6 @@ module.exports = {
       filename: 'index.html',
       template: 'src/template.html',
     }),
-
   ],
   optimization: {
     runtimeChunk: 'single',

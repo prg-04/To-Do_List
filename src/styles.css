@@ -1,0 +1,134 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: bisque;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: #fff;
+  border-radius: 5px;
+  width: 80%;
+  height: 60%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#container .heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 0.8rem 1rem 0.5rem;
+  border-bottom: 1px solid #ccc;
+}
+
+#container .heading .fa-arrows-rotate {
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+#container .heading .fa-arrows-rotate:hover {
+  transform: rotate(360deg);
+}
+
+#form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.3rem 0;
+  gap: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+#form input {
+  width: 100%;
+  padding: 1rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  border: none;
+}
+
+#form input:focus {
+  background-color: #fff;
+  outline: none;
+}
+
+#form button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+#form button:hover .fa-plus {
+  scale: 1.1;
+}
+
+#clearBtn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+}
+
+.task-description {
+  padding: 5px;
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.2rem 1rem 0.2rem 0.8rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.list-item .task-completed {
+  padding-bottom: 0.5rem;
+}
+
+.list-item .task-description {
+  margin-top: 0.5rem;
+  flex: 1;
+  padding: 1rem 0;
+  border: none;
+}
+
+.list-item .task-description:focus {
+  outline: none;
+}
+
+.list-item .fa-trash-can {
+  display: none;
+}
+
+.task-completed:checked + .task-description {
+  text-decoration: line-through;
+  color: #ccc;
+}
+
+#lists {
+  width: 100%;
+}
