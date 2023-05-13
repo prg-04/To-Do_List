@@ -132,3 +132,17 @@ body {
 #lists {
   width: 100%;
 }
+
+.alert {
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  height: 3rem;
+  width: 100%;
+  background-color: #fba7a7;
+  display: none;
+}
+
+.fa-ellipsis-vertical {
+  cursor: pointer;
+}

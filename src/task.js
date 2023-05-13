@@ -8,6 +8,9 @@ class Task {
     this.store = new Store('todo-list');
     this.items = this.store.getItems();
     this.form = document.getElementById('form');
+    this.alertDiv = document.createElement('div');
+    this.alertDiv.classList.add('alert');
+    this.form.insertAdjacentElement('beforebegin', this.alertDiv);
 
     this.currentId = 0;
     if (this.items.length > 0) {
@@ -35,13 +38,19 @@ class Task {
       const deleteBtn = itemElement.querySelector('.fa-trash-can');
       const ellipsis = itemElement.querySelector('.fa-ellipsis-vertical');
 
+      ellipsis.addEventListener('click', () => {
+        taskInput.disabled = false;
+        ellipsis.style.display = 'none';
+        deleteBtn.style.display = 'block';
+      });
+
       deleteBtn.addEventListener('click', () => {
         this.removeList(item.id);
       });
 
       if (taskInput) {
         taskInput.value = item.description;
-        taskInput.disabled = item.completed;
+        taskInput.disabled = item.completed || true;
       }
       if (completedTask) {
         completedTask.checked = item.completed;
@@ -59,6 +68,7 @@ class Task {
           this.updateItem(item, 'description', e.target.value);
         }
       });
+
       completedTask.addEventListener('change', () => {
         this.updateItem(item, 'completed', completedTask.checked);
         taskInput.disabled = item.completed;
@@ -74,6 +84,14 @@ class Task {
 
       this.container.appendChild(itemElement);
     });
+  }
+
+  showAlert() {
+    this.alertDiv.textContent = 'Please enter a description for the list.';
+    this.alertDiv.style.display = 'flex';
+    setTimeout(() => {
+      this.alertDiv.style.display = 'none';
+    }, 2000);
   }
 
   addList(list) {

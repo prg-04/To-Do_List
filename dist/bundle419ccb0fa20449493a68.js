@@ -36,27 +36,37 @@ var List = /*#__PURE__*/_createClass(function List(description) {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _styles_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles.css */ "./src/styles.css");
-/* harmony import */ var _task_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./task.js */ "./src/task.js");
-/* harmony import */ var _List_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./List.js */ "./src/List.js");
+/* harmony import */ var _task_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./task.js */ "./src/task.js");
+/* harmony import */ var _List_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./List.js */ "./src/List.js");
+// import "./styles.css";
 
 
-
-var task = new _task_js__WEBPACK_IMPORTED_MODULE_1__["default"]();
-document.getElementById('form').addEventListener('submit', function (e) {
+var task = new _task_js__WEBPACK_IMPORTED_MODULE_0__["default"]();
+document.getElementById("form").addEventListener("submit", function (e) {
   e.preventDefault();
-  var description = document.getElementById('input').value;
-  var list = new _List_js__WEBPACK_IMPORTED_MODULE_2__["default"](description);
-  task.addList(list);
-  task.clearInput();
+  var description = document.getElementById("input").value;
+  if (description === "") {
+    task.showAlert();
+  } else {
+    var list = new _List_js__WEBPACK_IMPORTED_MODULE_1__["default"](description);
+    task.addList(list);
+    task.clearInput();
+  }
 });
-var clearBtn = document.getElementById('clearBtn');
-var reloadBtn = document.querySelector('.fa-arrows-rotate');
-clearBtn.addEventListener('click', function () {
+var clearBtn = document.getElementById("clearBtn");
+var reloadBtn = document.querySelector(".fa-arrows-rotate");
+clearBtn.addEventListener("click", function () {
   task.removeCheckedTasks();
 });
-reloadBtn.addEventListener('click', function () {
+reloadBtn.addEventListener("click", function () {
   task.removeCheckedTasks();
+});
+document.getElementById("lists").addEventListener("click", function (event) {
+  if (event.target.classList.contains("fa-trash-can")) {
+    var listItem = event.target.closest(".list-item");
+    var itemId = parseInt(listItem.dataset.id);
+    task.removeList(itemId);
+  }
 });
 task.updateList();
 
@@ -136,13 +146,16 @@ var Task = /*#__PURE__*/function () {
   function Task() {
     _classCallCheck(this, Task);
     _defineProperty(this, "clearInput", function () {
-      document.getElementById('input').value = '';
+      document.getElementById("input").value = "";
     });
-    this.container = document.getElementById('lists');
-    this.template = document.getElementById('template');
-    this.store = new _store_js__WEBPACK_IMPORTED_MODULE_1__["default"]('todo-list');
+    this.container = document.getElementById("lists");
+    this.template = document.getElementById("template");
+    this.store = new _store_js__WEBPACK_IMPORTED_MODULE_1__["default"]("todo-list");
     this.items = this.store.getItems();
-    this.form = document.getElementById('form');
+    this.form = document.getElementById("form");
+    this.alertDiv = document.createElement("div");
+    this.alertDiv.classList.add("alert");
+    this.form.insertAdjacentElement("beforebegin", this.alertDiv);
     this.currentId = 0;
     if (this.items.length > 0) {
       this.currentId = this.items[this.items.length - 1].id;
@@ -164,49 +177,65 @@ var Task = /*#__PURE__*/function () {
     key: "updateList",
     value: function updateList() {
       var _this = this;
-      this.container.innerHTML = '';
-      this.items.forEach(function (item, index) {
+      this.container.innerHTML = "";
+      this.items.forEach(function (item) {
         var itemElement = _this.template.content.cloneNode(true);
-        var taskInput = itemElement.querySelector('.task-description');
-        var completedTask = itemElement.querySelector('.task-completed');
-        var deleteBtn = itemElement.querySelector('.fa-trash-can');
-        var ellipsis = itemElement.querySelector('.fa-ellipsis-vertical');
-        deleteBtn.addEventListener('click', function () {
+        var taskInput = itemElement.querySelector(".task-description");
+        var completedTask = itemElement.querySelector(".task-completed");
+        var deleteBtn = itemElement.querySelector(".fa-trash-can");
+        var ellipsis = itemElement.querySelector(".fa-ellipsis-vertical");
+        ellipsis.addEventListener("click", function () {
+          taskInput.disabled = false;
+          ellipsis.style.display = "none";
+          deleteBtn.style.display = "block";
+        });
+        deleteBtn.addEventListener("click", function () {
           _this.removeList(item.id);
         });
         if (taskInput) {
           taskInput.value = item.description;
-          taskInput.disabled = item.completed;
+          taskInput.disabled = item.completed || true; // set disabled property to true initially
         }
+
         if (completedTask) {
           completedTask.checked = item.completed;
           if (item.completed) {
-            deleteBtn.style.display = 'block';
-            ellipsis.style.display = 'none';
+            deleteBtn.style.display = "block";
+            ellipsis.style.display = "none";
           } else {
-            deleteBtn.style.display = 'none';
-            ellipsis.style.display = 'block';
+            deleteBtn.style.display = "none";
+            ellipsis.style.display = "block";
           }
         }
-        taskInput.addEventListener('change', function (e) {
+        taskInput.addEventListener("change", function (e) {
           if (!item.completed) {
-            _this.updateItem(item, 'description', e.target.value);
+            _this.updateItem(item, "description", e.target.value);
           }
         });
-        completedTask.addEventListener('change', function () {
-          _this.updateItem(item, 'completed', completedTask.checked);
+        completedTask.addEventListener("change", function () {
+          _this.updateItem(item, "completed", completedTask.checked);
           taskInput.disabled = item.completed;
           completedTask.checked = item.completed;
           if (item.completed) {
-            deleteBtn.style.display = 'block';
-            ellipsis.style.display = 'none';
+            deleteBtn.style.display = "block";
+            ellipsis.style.display = "none";
           } else {
-            deleteBtn.style.display = 'none';
-            ellipsis.style.display = 'block';
+            deleteBtn.style.display = "none";
+            ellipsis.style.display = "block";
           }
         });
         _this.container.appendChild(itemElement);
       });
+    }
+  }, {
+    key: "showAlert",
+    value: function showAlert() {
+      var _this2 = this;
+      this.alertDiv.textContent = "Please enter a description for the list.";
+      this.alertDiv.style.display = "flex";
+      setTimeout(function () {
+        _this2.alertDiv.style.display = "none";
+      }, 2000);
     }
   }, {
     key: "addList",
@@ -228,7 +257,7 @@ var Task = /*#__PURE__*/function () {
       });
       if (index !== -1) {
         this.items.splice(index, 1);
-        for (var i = index; i < this.items.length; i++) {
+        for (var i = index; i < this.items.length; i + 1) {
           this.items[i].id = i + 1;
         }
         this.store.setItems(this.items);
@@ -275,7 +304,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n  font-family: \"Poppins\", sans-serif;\n  background: bisque;\n}\n\n#container {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 60%;\n  max-width: 500px;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n\n#container .heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 1rem 0.8rem 1rem 0.5rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#container .heading .fa-arrows-rotate {\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n\n#container .heading .fa-arrows-rotate:hover {\n  transform: rotate(360deg);\n}\n\n#form {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.3rem 0;\n  gap: 1rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#form input {\n  width: 100%;\n  padding: 1rem 0.5rem;\n  border-radius: 0.5rem;\n  border: 1px solid #ccc;\n  border: none;\n}\n\n#form input:focus {\n  background-color: #fff;\n  outline: none;\n}\n\n#form button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.5rem;\n  border: none;\n  background-color: #fff;\n  cursor: pointer;\n}\n\n#form button:hover .fa-plus {\n  scale: 1.1;\n}\n\n#clearBtn {\n  width: 100%;\n  padding: 1rem;\n  border: none;\n}\n\n.task-description {\n  padding: 5px;\n  width: 200px;\n  margin-bottom: 10px;\n}\n\n.list-item {\n  display: flex;\n  align-items: center;\n  gap: 1rem;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.2rem 1rem 0.2rem 0.8rem;\n  border-bottom: 1px solid #ccc;\n}\n\n.list-item .task-completed {\n  padding-bottom: 0.5rem;\n}\n\n.list-item .task-description {\n  margin-top: 0.5rem;\n  flex: 1;\n  padding: 1rem 0;\n  border: none;\n}\n\n.list-item .task-description:focus {\n  outline: none;\n}\n\n.list-item .fa-trash-can {\n  display: none;\n}\n\n.task-completed:checked + .task-description {\n  text-decoration: line-through;\n  color: #ccc;\n}\n\n#lists {\n  width: 100%;\n}", "",{"version":3,"sources":["webpack://./src/styles.css"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,gBAAA;EACA,qBAAA;EACA,sBAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,mBAAA;EACA,iBAAA;EACA,kCAAA;EACA,kBAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,mBAAA;EACA,kBAAA;EACA,sBAAA;EACA,kBAAA;EACA,UAAA;EACA,WAAA;EACA,gBAAA;EACA,uCAAA;AACF;;AAEA;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,WAAA;EACA,gCAAA;EACA,6BAAA;AACF;;AAEA;EACE,eAAA;EACA,gCAAA;AACF;;AAEA;EACE,yBAAA;AACF;;AAEA;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,WAAA;EACA,iBAAA;EACA,SAAA;EACA,6BAAA;AACF;;AAEA;EACE,WAAA;EACA,oBAAA;EACA,qBAAA;EACA,sBAAA;EACA,YAAA;AACF;;AAEA;EACE,sBAAA;EACA,aAAA;AACF;;AAEA;EACE,oBAAA;EACA,qBAAA;EACA,YAAA;EACA,sBAAA;EACA,eAAA;AACF;;AAEA;EACE,UAAA;AACF;;AAEA;EACE,WAAA;EACA,aAAA;EACA,YAAA;AACF;;AAEA;EACE,YAAA;EACA,YAAA;EACA,mBAAA;AACF;;AAEA;EACE,aAAA;EACA,mBAAA;EACA,SAAA;EACA,8BAAA;EACA,WAAA;EACA,kCAAA;EACA,6BAAA;AACF;;AAEA;EACE,sBAAA;AACF;;AAEA;EACE,kBAAA;EACA,OAAA;EACA,eAAA;EACA,YAAA;AACF;;AAEA;EACE,aAAA;AACF;;AAEA;EACE,aAAA;AACF;;AAEA;EACE,6BAAA;EACA,WAAA;AACF;;AAEA;EACE,WAAA;AACF","sourcesContent":["* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n  font-family: \"Poppins\", sans-serif;\n  background: bisque;\n}\n\n#container {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 60%;\n  max-width: 500px;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n\n#container .heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 1rem 0.8rem 1rem 0.5rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#container .heading .fa-arrows-rotate {\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n\n#container .heading .fa-arrows-rotate:hover {\n  transform: rotate(360deg);\n}\n\n#form {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.3rem 0;\n  gap: 1rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#form input {\n  width: 100%;\n  padding: 1rem 0.5rem;\n  border-radius: 0.5rem;\n  border: 1px solid #ccc;\n  border: none;\n}\n\n#form input:focus {\n  background-color: #fff;\n  outline: none;\n}\n\n#form button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.5rem;\n  border: none;\n  background-color: #fff;\n  cursor: pointer;\n}\n\n#form button:hover .fa-plus {\n  scale: 1.1;\n}\n\n#clearBtn {\n  width: 100%;\n  padding: 1rem;\n  border: none;\n}\n\n.task-description {\n  padding: 5px;\n  width: 200px;\n  margin-bottom: 10px;\n}\n\n.list-item {\n  display: flex;\n  align-items: center;\n  gap: 1rem;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.2rem 1rem 0.2rem 0.8rem;\n  border-bottom: 1px solid #ccc;\n}\n\n.list-item .task-completed {\n  padding-bottom: 0.5rem;\n}\n\n.list-item .task-description {\n  margin-top: 0.5rem;\n  flex: 1;\n  padding: 1rem 0;\n  border: none;\n}\n\n.list-item .task-description:focus {\n  outline: none;\n}\n\n.list-item .fa-trash-can {\n  display: none;\n}\n\n.task-completed:checked + .task-description {\n  text-decoration: line-through;\n  color: #ccc;\n}\n\n#lists {\n  width: 100%;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n  font-family: \"Poppins\", sans-serif;\n  background: bisque;\n}\n\n#container {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 60%;\n  max-width: 500px;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n\n#container .heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 1rem 0.8rem 1rem 0.5rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#container .heading .fa-arrows-rotate {\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n\n#container .heading .fa-arrows-rotate:hover {\n  transform: rotate(360deg);\n}\n\n#form {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.3rem 0;\n  gap: 1rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#form input {\n  width: 100%;\n  padding: 1rem 0.5rem;\n  border-radius: 0.5rem;\n  border: 1px solid #ccc;\n  border: none;\n}\n\n#form input:focus {\n  background-color: #fff;\n  outline: none;\n}\n\n#form button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.5rem;\n  border: none;\n  background-color: #fff;\n  cursor: pointer;\n}\n\n#form button:hover .fa-plus {\n  scale: 1.1;\n}\n\n#clearBtn {\n  width: 100%;\n  padding: 1rem;\n  border: none;\n}\n\n.task-description {\n  padding: 5px;\n  width: 200px;\n  margin-bottom: 10px;\n}\n\n.list-item {\n  display: flex;\n  align-items: center;\n  gap: 1rem;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.2rem 1rem 0.2rem 0.8rem;\n  border-bottom: 1px solid #ccc;\n}\n\n.list-item .task-completed {\n  padding-bottom: 0.5rem;\n}\n\n.list-item .task-description {\n  margin-top: 0.5rem;\n  flex: 1;\n  padding: 1rem 0;\n  border: none;\n}\n\n.list-item .task-description:focus {\n  outline: none;\n}\n\n.list-item .fa-trash-can {\n  display: none;\n}\n\n.task-completed:checked + .task-description {\n  text-decoration: line-through;\n  color: #ccc;\n}\n\n#lists {\n  width: 100%;\n}\n\n.alert {\n  align-items: center;\n  justify-content: center;\n  color: #fff;\n  height: 3rem;\n  width: 100%;\n  background-color: #fba7a7;\n  display: none;\n}\n\n.fa-ellipsis-vertical {\n  cursor: pointer;\n}", "",{"version":3,"sources":["webpack://./src/styles.css"],"names":[],"mappings":"AAAA;EACE,SAAA;EACA,UAAA;EACA,gBAAA;EACA,qBAAA;EACA,sBAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,mBAAA;EACA,iBAAA;EACA,kCAAA;EACA,kBAAA;AACF;;AAEA;EACE,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,mBAAA;EACA,kBAAA;EACA,sBAAA;EACA,kBAAA;EACA,UAAA;EACA,WAAA;EACA,gBAAA;EACA,uCAAA;AACF;;AAEA;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,WAAA;EACA,gCAAA;EACA,6BAAA;AACF;;AAEA;EACE,eAAA;EACA,gCAAA;AACF;;AAEA;EACE,yBAAA;AACF;;AAEA;EACE,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,WAAA;EACA,iBAAA;EACA,SAAA;EACA,6BAAA;AACF;;AAEA;EACE,WAAA;EACA,oBAAA;EACA,qBAAA;EACA,sBAAA;EACA,YAAA;AACF;;AAEA;EACE,sBAAA;EACA,aAAA;AACF;;AAEA;EACE,oBAAA;EACA,qBAAA;EACA,YAAA;EACA,sBAAA;EACA,eAAA;AACF;;AAEA;EACE,UAAA;AACF;;AAEA;EACE,WAAA;EACA,aAAA;EACA,YAAA;AACF;;AAEA;EACE,YAAA;EACA,YAAA;EACA,mBAAA;AACF;;AAGA;EACE,aAAA;EACA,mBAAA;EACA,SAAA;EACA,8BAAA;EACA,WAAA;EACA,kCAAA;EACA,6BAAA;AAAF;;AAGA;EACE,sBAAA;AAAF;;AAGA;EACE,kBAAA;EACA,OAAA;EACA,eAAA;EACA,YAAA;AAAF;;AAGA;EACE,aAAA;AAAF;;AAGA;EACE,aAAA;AAAF;;AAGA;EACE,6BAAA;EACA,WAAA;AAAF;;AAGA;EACE,WAAA;AAAF;;AAGA;EACE,mBAAA;EACA,uBAAA;EACA,WAAA;EACA,YAAA;EACA,WAAA;EACA,yBAAA;EACA,aAAA;AAAF;;AAGA;EACE,eAAA;AAAF","sourcesContent":["* {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  text-decoration: none;\n  box-sizing: border-box;\n}\n\nbody {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n  font-family: \"Poppins\", sans-serif;\n  background: bisque;\n}\n\n#container {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  position: relative;\n  background-color: #fff;\n  border-radius: 5px;\n  width: 80%;\n  height: 60%;\n  max-width: 500px;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n}\n\n#container .heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 1rem 0.8rem 1rem 0.5rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#container .heading .fa-arrows-rotate {\n  cursor: pointer;\n  transition: all 0.3s ease-in-out;\n}\n\n#container .heading .fa-arrows-rotate:hover {\n  transform: rotate(360deg);\n}\n\n#form {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.3rem 0;\n  gap: 1rem;\n  border-bottom: 1px solid #ccc;\n}\n\n#form input {\n  width: 100%;\n  padding: 1rem 0.5rem;\n  border-radius: 0.5rem;\n  border: 1px solid #ccc;\n  border: none;\n}\n\n#form input:focus {\n  background-color: #fff;\n  outline: none;\n}\n\n#form button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.5rem;\n  border: none;\n  background-color: #fff;\n  cursor: pointer;\n}\n\n#form button:hover .fa-plus {\n  scale: 1.1;\n}\n\n#clearBtn {\n  width: 100%;\n  padding: 1rem;\n  border: none;\n}\n\n.task-description {\n  padding: 5px;\n  width: 200px;\n  margin-bottom: 10px;\n\n}\n\n.list-item {\n  display: flex;\n  align-items: center;\n  gap: 1rem;\n  justify-content: space-between;\n  width: 100%;\n  padding: 0.2rem 1rem 0.2rem 0.8rem;\n  border-bottom: 1px solid #ccc;\n}\n\n.list-item .task-completed {\n  padding-bottom: 0.5rem;\n}\n\n.list-item .task-description {\n  margin-top: 0.5rem;\n  flex: 1;\n  padding: 1rem 0;\n  border: none;\n}\n\n.list-item .task-description:focus {\n  outline: none;\n}\n\n.list-item .fa-trash-can {\n  display: none;\n}\n\n.task-completed:checked + .task-description {\n  text-decoration: line-through;\n  color: #ccc;\n}\n\n#lists {\n  width: 100%;\n}\n\n.alert {\n  align-items: center;\n  justify-content: center;\n  color: #fff;\n  height: 3rem;\n  width: 100%;\n  background-color: #fba7a7;\n  display: none;\n}\n\n.fa-ellipsis-vertical {\n  cursor: pointer;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -728,4 +757,4 @@ module.exports = styleTagTransform;
 /******/ var __webpack_exports__ = (__webpack_exec__("./src/index.js"));
 /******/ }
 ]);
-//# sourceMappingURL=bundle75427ca8bd6408cca2fc.js.map
+//# sourceMappingURL=bundle419ccb0fa20449493a68.js.map
