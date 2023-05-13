@@ -1,52 +1,38 @@
-import './styles.scss';
-import reload from './assets/refresh.png';
-import enter from './assets/enter.png';
-import addList from './addList.js';
+import Task from './task.js';
 import List from './List.js';
-import Store from './store.js';
-import dummyList from './dynamicObj.js';
 
-const heading = document.getElementById('reloadImg');
-heading.src = reload;
-
-document.getElementById('addBtn').innerHTML = `
-<img src=${enter} alt="enter" />
-`;
+const task = new Task();
 
 document.getElementById('form').addEventListener('submit', (e) => {
   e.preventDefault();
-  const input = document.getElementById('input').value;
-  if (input === '') {
-    addList.showAlert();
+
+  const description = document.getElementById('input').value;
+  if (description === '') {
+    task.showAlert();
   } else {
-    const list = new List(input);
-    addList.addList(list);
-    Store.addList(list);
-    addList.clearFields();
+    const list = new List(description);
+    task.addList(list);
+    task.clearInput();
   }
 });
 
-const removeElem = () => {
-  document.querySelectorAll('.list-group-item').forEach((elem) => {
-    elem.querySelectorAll('.form-check-input').forEach((item) => {
-      if (item.checked === true) {
-        item.parentNode.parentNode.remove();
-        addList.removeCompleted(item);
-        Store.removeList(item);
-      }
-    });
-  });
-};
-document.getElementById('reloadImg').addEventListener('click', removeElem);
+const clearBtn = document.getElementById('clearBtn');
+const reloadBtn = document.querySelector('.fa-arrows-rotate');
 
-document.getElementById('clearBtn').addEventListener('click', removeElem);
-
-document.addEventListener('DOMContentLoaded', () => {
-  dummyList.forEach((list) => {
-    addList.addList(list);
-  });
+clearBtn.addEventListener('click', () => {
+  task.removeCheckedTasks();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  addList.displayList();
+reloadBtn.addEventListener('click', () => {
+  task.removeCheckedTasks();
 });
+
+document.getElementById('lists').addEventListener('click', (event) => {
+  if (event.target.classList.contains('fa-trash-can')) {
+    const listItem = event.target.closest('.list-item');
+    const itemId = parseInt(listItem.dataset.id, 10);
+    task.removeList(itemId);
+  }
+});
+
+task.updateList();
