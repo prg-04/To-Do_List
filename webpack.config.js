@@ -13,7 +13,7 @@ module.exports = {
   },
   output: {
     filename: '[name][contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'docs'),
     clean: true,
     publicPath: '/',
     assetModuleFilename: '[name][ext]',
@@ -47,7 +47,7 @@ module.exports = {
   devtool: 'source-map',
   devServer: {
     static: {
-      directory: path.resolve(__dirname, 'dist'),
+      directory: path.resolve(__dirname, 'docs'),
     },
     port: 8080,
     open: true,
