@@ -5,7 +5,7 @@ class Store {
 
   getItems() {
     const item = localStorage.getItem(this.key);
-    if (item === null || item === '') {
+    if (item === null || item === "") {
       return [];
     }
     try {

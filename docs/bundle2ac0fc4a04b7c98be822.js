@@ -96,7 +96,7 @@ var Store = /*#__PURE__*/function () {
     key: "getItems",
     value: function getItems() {
       var item = localStorage.getItem(this.key);
-      if (item === null || item === '') {
+      if (item === null || item === "") {
         return [];
       }
       try {
@@ -755,4 +755,4 @@ module.exports = styleTagTransform;
 /******/ var __webpack_exports__ = (__webpack_exec__("./src/index.js"));
 /******/ }
 ]);
-//# sourceMappingURL=bundle1071880c9f29e6aca886.js.map
+//# sourceMappingURL=bundle2ac0fc4a04b7c98be822.js.map

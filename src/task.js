@@ -6,7 +6,7 @@ class Task {
     this.container = document.getElementById('lists');
     this.template = document.getElementById('template');
     this.store = new Store('todo-list');
-    this.items = this.store.getItems();
+    this.items = [];
     this.form = document.getElementById('form');
     this.alertDiv = document.createElement('div');
     this.alertDiv.classList.add('alert');
@@ -18,6 +18,12 @@ class Task {
     }
 
     this.updateList();
+  }
+
+  updateIds() {
+    for (let i = 0; i < this.items.length; i++) {
+      this.items[i].id = i + 1;
+    }
   }
 
   updateItem(item, key, value) {
@@ -110,20 +116,16 @@ class Task {
     const index = this.items.findIndex((item) => item.id === id);
     if (index !== -1) {
       this.items.splice(index, 1);
-      for (let i = index; i < this.items.length; i += 1) {
+      for (let i = index; i < this.items.length; i++) {
         this.items[i].id = i + 1;
       }
-      this.store.setItems(this.items);
       this.updateList();
     }
   }
 
   removeCheckedTasks() {
     const uncheckedItems = this.items.filter((item) => !item.completed);
-    this.items = uncheckedItems.map((item, index) => ({
-      ...item,
-      id: index + 1,
-    }));
+    this.updateIds();
 
     this.store.setItems(this.items);
     this.updateList();

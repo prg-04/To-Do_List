@@ -4,9 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      src="https://kit.fontawesome.com/0ec53d8e70.js"
-      crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/0ec53d8e70.js" crossorigin="anonymous"></script>
+
     <title><%=htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
@@ -26,13 +25,13 @@
       <button id="clearBtn">Clear all completed</button>
     </div>
 
-     <template id="template" class="task-template">
-        <div class="list-item">
-          <input type="checkbox" class="task-completed" />
-          <input type="text" class="task-description" />
-          <i class="fa-solid fa-ellipsis-vertical"></i>
-          <i class="fa-regular fa-trash-can"></i>
-        </div>
-      </template>
+    <template id="template" class="task-template">
+      <div class="list-item">
+        <input type="checkbox" class="task-completed" />
+        <input type="text" class="task-description" />
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+        <i class="fa-regular fa-trash-can"></i>
+      </div>
+    </template>
   </body>
 </html>
